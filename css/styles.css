@@ -1,0 +1,31 @@
+*{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    /* padding: 10px; */
+    margin: 15px;
+}
+
+body{
+    color: green;
+    background-color: azure;
+}
+img{
+    width: 50%;
+    height: 30%;
+    border-top-right-radius:  25%;
+    border-bottom-left-radius: 25%;
+    /* border-radius: 50% */
+}
+header, section, footer {
+  text-align: center;
+}
+#info, h2, form, input{
+  text-align: left;
+  margin: 0px;
+}
+table td{
+  text-align: left;
+}
+ul{
+  list-style: none;
+}
