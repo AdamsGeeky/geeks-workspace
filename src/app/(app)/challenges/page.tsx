@@ -181,7 +181,7 @@ export default function ChallengesPage() {
               const hasJoined = !!challenge.participants?.some((p: any) => p.userId === user?.id)
               const isLive = isChallengeLive(challenge)
               const xp = getXpReward(challenge)
-              const canJoin = user?.role === 'STUDENT' && challenge.status === 'ACTIVE' && isLive && !hasJoined
+              const canJoin = user?.role === 'STUDENT' && challenge.status === 'ACTIVE' && !hasJoined
               const canSubmit = user?.role === 'STUDENT' && hasJoined
 
               return (
@@ -248,14 +248,14 @@ export default function ChallengesPage() {
                             Joined
                           </Button>
                         )}
-                        {!canJoin && !canSubmit && user?.role === 'STUDENT' && challenge.status === 'ACTIVE' && (
+                        {!canJoin && !canSubmit && user?.role === 'STUDENT' && challenge.status === 'ENDED' && (
                           <Button size="sm" variant="outline" disabled className="flex-1">
-                            Not live yet
+                            Challenge ended
                           </Button>
                         )}
                         {(user?.role === 'MENTOR' || user?.role === 'ADMIN') && (
                           <Button size="sm" variant="outline" disabled className="flex-1">
-                            View
+                            View details
                           </Button>
                         )}
                       </div>
