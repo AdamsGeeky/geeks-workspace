@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'https://geekink-cloud-sp39l.ondigitalocean.app/api/v1'
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://geekink-cloud-sp39l.ondigitalocean.app/api/v1'
 
 export const QUERY_KEYS = {
   AUTH_ME: ['auth', 'me'],

@@ -20,7 +20,25 @@ npm install
 # Install may take 2-3 minutes
 ```
 
-### Step 2: Start Dev Server
+### Step 2: Configure Environment (Optional)
+
+By default, the app uses the production API: `https://geekink-cloud-sp39l.ondigitalocean.app/api/v1`
+
+To use a **different API endpoint** (e.g., local backend), create `.env.local`:
+
+```bash
+# For local backend on same machine
+echo "NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1" > .env.local
+
+# For Docker backend
+echo "NEXT_PUBLIC_API_URL=http://backend:8000/api/v1" > .env.local
+
+# Or just edit .env.local manually
+```
+
+Then restart the dev server. See [ENV_CONFIGURATION.md](./ENV_CONFIGURATION.md) for more details.
+
+### Step 3: Start Dev Server
 
 ```bash
 npm run dev
@@ -31,7 +49,7 @@ npm run dev
 # ✓ Ready in 623ms
 ```
 
-### Step 3: Open in Browser
+### Step 4: Open in Browser
 
 Navigate to `http://localhost:3000` → You'll be redirected to `/login`
 
