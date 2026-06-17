@@ -5,10 +5,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { formatDistanceToNow, parseISO } from 'date-fns'
 import { Users, MessageCircle, Loader2, Send, ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
-import api from '@/lib/api'
+import api, { unwrapList } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import { handleApiError } from '@/lib/handleApiError'
-import type { CommunityPost, Comment, ReactionType } from '@/types'
+import type { CommunityPost, Comment, ReactionType, FeaturedBuilder } from '@/types'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -35,8 +35,8 @@ function PostComments({ postId }: { postId: string }) {
   const { data: comments } = useQuery({
     queryKey: ['comments', 'post', postId],
     queryFn: async () => {
-      const res = await api.get<Comment[]>(`/comments/posts/${postId}`)
-      return Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+      const res = await api.get(`/comments/posts/${postId}`)
+      return unwrapList<Comment>(res.data)
     },
     staleTime: 30_000,
   })
@@ -181,7 +181,7 @@ function FeaturedBuilders() {
     queryKey: ['featured-builders'],
     queryFn: async () => {
       const res = await api.get('/featured-builders')
-      return Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+      return unwrapList<FeaturedBuilder>(res.data)
     },
     staleTime: 5 * 60_000,
   })
@@ -192,11 +192,11 @@ function FeaturedBuilders() {
     <Card className="h-fit">
       <CardHeader><h2 className="text-sm font-semibold">Featured Builders</h2></CardHeader>
       <CardContent className="flex flex-col gap-3">
-        {data.map((b: any) => (
+        {data.map((b) => (
           <div key={b.id} className="flex items-center gap-2">
-            <UserAvatar name={b.fullName} avatarUrl={b.avatarUrl} className="size-7" />
+            <UserAvatar name={b.user?.fullName ?? 'Builder'} avatarUrl={b.user?.avatarUrl} className="size-7" />
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium truncate">{b.fullName}</p>
+              <p className="text-xs font-medium truncate">{b.user?.fullName ?? 'Builder'}</p>
               <p className="text-xs text-muted-foreground truncate">{b.reason}</p>
             </div>
           </div>
@@ -216,8 +216,8 @@ export default function CommunityPage() {
   const { data: posts, isLoading } = useQuery({
     queryKey: ['community', 'posts'],
     queryFn: async () => {
-      const res = await api.get<CommunityPost[]>('/community/posts')
-      return Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+      const res = await api.get('/community/posts')
+      return unwrapList<CommunityPost>(res.data)
     },
     staleTime: 30_000,
   })

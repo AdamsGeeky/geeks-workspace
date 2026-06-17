@@ -9,7 +9,7 @@ import { format, parseISO, isPast } from 'date-fns'
 import { ClipboardList, Plus, Loader2, Eye } from 'lucide-react'
 import { toast } from 'sonner'
 import Link from 'next/link'
-import api from '@/lib/api'
+import api, { unwrapList } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import { handleApiError } from '@/lib/handleApiError'
 import type { Assignment, Cohort } from '@/types'
@@ -48,8 +48,8 @@ export default function AssignmentsPage() {
   const { data: assignments, isLoading } = useQuery({
     queryKey: ['assignments'],
     queryFn: async () => {
-      const res = await api.get<Assignment[]>('/assignments')
-      return Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+      const res = await api.get('/assignments')
+      return unwrapList<Assignment>(res.data)
     },
     staleTime: 30_000,
   })
@@ -57,8 +57,8 @@ export default function AssignmentsPage() {
   const { data: cohorts } = useQuery({
     queryKey: ['cohorts'],
     queryFn: async () => {
-      const res = await api.get<Cohort[]>('/cohorts')
-      return Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+      const res = await api.get('/cohorts')
+      return unwrapList<Cohort>(res.data)
     },
     enabled: canManage,
     staleTime: 5 * 60_000,

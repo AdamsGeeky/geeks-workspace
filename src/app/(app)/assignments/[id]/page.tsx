@@ -6,10 +6,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { format, formatDistanceToNow, parseISO, isFuture } from 'date-fns'
-import { ArrowLeft, Github, ExternalLink, Loader2 } from 'lucide-react'
+import { ArrowLeft, Code2, ExternalLink, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import Link from 'next/link'
-import api from '@/lib/api'
+import api, { unwrapList } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import { handleApiError } from '@/lib/handleApiError'
 import type { Assignment, Submission } from '@/types'
@@ -52,8 +52,8 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
   const { data: allAssignments, isLoading: assignLoading } = useQuery({
     queryKey: ['assignments'],
     queryFn: async () => {
-      const res = await api.get<Assignment[]>('/assignments')
-      return Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+      const res = await api.get('/assignments')
+      return unwrapList<Assignment>(res.data)
     },
     staleTime: 30_000,
   })
@@ -63,8 +63,8 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
   const { data: submissions } = useQuery({
     queryKey: ['submissions'],
     queryFn: async () => {
-      const res = await api.get<Submission[]>('/submissions')
-      return Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+      const res = await api.get('/submissions')
+      return unwrapList<Submission>(res.data)
     },
     staleTime: 30_000,
   })
@@ -179,7 +179,7 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
                 </div>
                 {mySubmission.githubUrl && (
                   <a href={mySubmission.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-sm text-primary hover:underline">
-                    <Github className="size-4" /> GitHub Link
+                    <Code2 className="size-4" /> GitHub Link
                   </a>
                 )}
                 {mySubmission.fileUrl && (
@@ -243,7 +243,7 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
                       </div>
                       {s.githubUrl && (
                         <a href={s.githubUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1 mt-1">
-                          <Github className="size-3" /> GitHub
+                          <Code2 className="size-3" /> GitHub
                         </a>
                       )}
                     </div>

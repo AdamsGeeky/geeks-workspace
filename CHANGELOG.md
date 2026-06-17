@@ -2,6 +2,44 @@
 
 All notable changes to the GeekInk Workspace project are documented in this file.
 
+## [0.2.0] - 2026-06-17
+
+### 🔌 Real API Integration & Gamification Build
+
+This release moves the workspace off mock data and onto the real backend contracts, resolves all outstanding type errors, and ships the full gamification and activity layer. `tsc --noEmit` and `next build` both pass cleanly (17 routes generated).
+
+### ✨ Features
+
+#### Gamification & Engagement (Prompt 13)
+- **GamificationWidget** (`components/features/gamification/`) — fetches `/streaks/me`, `/reputation/me`, and `/achievements/me` in parallel via React Query; renders streak count (with "expires soon" warning), reputation score/level, and recent achievements.
+- **ActivityFeed** (`components/features/activity/`) — cursor-based infinite query against `/activity` (`mode="me"`) and `/activity/all` (`mode="all"`), with "Load more", relative timestamps, and per-event-type iconography.
+- **TodayMission** (`components/features/engagement/`) — surfaces the `/engagement/today` mission card with primary CTA, streak, reputation, and contextual nudges.
+- Components wired into the **dashboard** (`mode="me"` activity), **admin panel** (`mode="all"` platform activity), and **profile** pages.
+
+#### Own Profile Page (`/profile`)
+- New authenticated self-profile route with profile header, **edit dialog** (React Hook Form + Zod; admin-only role field), streak/reputation stat cards, claimable **achievements grid**, the GamificationWidget sidebar, and the personal activity feed.
+
+#### Pages Migrated from Mock → Real API
+- **Challenges** — rewritten against the real `Challenge` schema (uppercase status, `rewardConfig`, `participants[]`) with join/submit mutations.
+- **Admin** — uses `/admin/overview` for live counts and a correct `ADMIN` role guard.
+- **Cohorts list & detail** — real `/cohorts` data, nested `members[]`/`mentor`, and cohort-scoped assignments.
+- **Public Profile** (`/profile/[id]`) — real `/users/:id` + `/reputation/users/:id` data.
+- **Announcements, Assignments, Community, Materials, Notifications** — envelope-unwrap `any` casts replaced with typed helpers.
+
+### 🐛 Fixes
+- Resolved **all 28 TypeScript errors** across the app.
+- Added typed `unwrapList<T>()` / `unwrapOne<T>()` helpers in `lib/api.ts` to safely normalize raw-array vs `{ data }` envelope responses.
+- Replaced the non-exported `Github` icon (lucide-react 1.20) with `Code2` and removed an unused `Badge` import.
+
+### 🧩 Types
+- Added response types to `types/index.ts`: `FeaturedBuilder`, `AchievementProgress`, `AdminOverviewResponse`, `ActivityEvent`, `TodayMissionData`.
+
+### ✅ Verification
+- `tsc --noEmit`: **0 errors**
+- `next build`: **success** — all 17 routes compiled, including the new `/profile` route.
+
+---
+
 ## [0.1.0] - 2026-06-17
 
 ### 🎉 Initial Project Scaffold
@@ -309,4 +347,4 @@ Built with v0 (Vercel's AI code generator) using Next.js 16, shadcn/ui, and Tail
 ---
 
 **Last Updated**: June 17, 2026  
-**Status**: ✅ Ready for Preview & Development
+**Status**: ✅ Integrated with real API — gamification & activity live

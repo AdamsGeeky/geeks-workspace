@@ -16,6 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { UserAvatar } from '@/components/shared/UserAvatar'
+import { ActivityFeed } from '@/components/features/activity/ActivityFeed'
 
 type DashboardData = StudentDashboard | MentorDashboard | AdminDashboard
 
@@ -433,6 +434,11 @@ export default function DashboardPage() {
           {data.role === 'STUDENT' && <StudentDash data={data as StudentDashboard} />}
           {data.role === 'MENTOR' && <MentorDash data={data as MentorDashboard} />}
           {data.role === 'ADMIN' && <AdminDash data={data as AdminDashboard} />}
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <ActivityFeed mode="me" />
+            </div>
+          </div>
         </>
       )}
     </div>
