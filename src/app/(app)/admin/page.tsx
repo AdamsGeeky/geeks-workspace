@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { useAuthStore } from '@/store/authStore'
+import { ActivityFeed } from '@/components/features/activity/ActivityFeed'
 import api, { unwrapOne } from '@/lib/api'
 import type { AdminOverviewResponse } from '@/types'
 
@@ -124,6 +125,8 @@ export default function AdminPage() {
           </CardContent>
         </Card>
       </div>
+
+      <ActivityFeed mode="all" limit={20} />
     </div>
   )
 }
