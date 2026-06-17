@@ -178,13 +178,13 @@ export default function ChallengesPage() {
                     </div>
                     <Button
                       size="sm"
-                      disabled={hasJoined || challenge.status !== 'ACTIVE' || joinMutation.isPending}
+                      disabled={hasJoined || challenge.status !== 'ACTIVE' || joinMutation.isPending || user?.role !== 'STUDENT'}
                       onClick={() => joinMutation.mutate(challenge.id)}
                     >
                       {joinMutation.isPending && joinMutation.variables === challenge.id && (
                         <Loader2 className="size-4 animate-spin" data-icon="inline-start" />
                       )}
-                      {hasJoined ? 'Joined' : 'Join'}
+                      {hasJoined ? 'Joined' : user?.role === 'STUDENT' ? 'Join' : 'Not available for your role'}
                     </Button>
                   </div>
                 </CardContent>
