@@ -46,7 +46,9 @@ export function RegisterForm() {
     },
     onSuccess: (data) => {
       setAuth(data.user, data.accessToken)
+      // Set cookies for middleware SSR auth + admin-role checks
       document.cookie = `accessToken=${data.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}`
+      document.cookie = `role=${data.user.role}; path=/; max-age=${60 * 60 * 24 * 7}`
       qc.invalidateQueries({ queryKey: ['auth', 'me'] })
       toast.success(`Welcome to GeekInk, ${data.user.fullName}!`)
       router.push('/dashboard')

@@ -24,6 +24,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (typeof window !== 'undefined') {
       localStorage.removeItem('accessToken')
       localStorage.removeItem('user')
+      // Expire middleware cookies
+      document.cookie = 'accessToken=; path=/; max-age=0'
+      document.cookie = 'role=; path=/; max-age=0'
     }
     set({ user: null, accessToken: null })
   },

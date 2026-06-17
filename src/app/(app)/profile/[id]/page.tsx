@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
+import { format, parseISO } from 'date-fns'
 import { Mail, Star, Calendar, Award, Edit2, MessageSquare, FileText, Flame } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -88,7 +89,7 @@ export default function ProfileDetailPage() {
               <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1.5">
                   <Calendar className="size-3.5" />
-                  Joined {new Date(profile.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                  Joined {format(parseISO(profile.createdAt), 'MMMM yyyy')}
                 </span>
                 <a href={`mailto:${profile.email}`} className="flex items-center gap-1.5 hover:text-foreground transition-colors">
                   <Mail className="size-3.5" /> {profile.email}

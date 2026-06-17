@@ -45,8 +45,9 @@ export function LoginForm() {
     },
     onSuccess: (data) => {
       setAuth(data.user, data.accessToken)
-      // Set cookie for middleware SSR auth check
+      // Set cookies for middleware SSR auth + admin-role checks
       document.cookie = `accessToken=${data.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}`
+      document.cookie = `role=${data.user.role}; path=/; max-age=${60 * 60 * 24 * 7}`
       qc.invalidateQueries({ queryKey: ['auth', 'me'] })
       toast.success(`Welcome back, ${data.user.fullName}!`)
       router.push('/dashboard')

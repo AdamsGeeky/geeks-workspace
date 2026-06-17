@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
+import { format, formatDistanceToNow, isFuture, parseISO } from 'date-fns'
 import { Users, BookOpen, ChevronLeft } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -127,7 +128,9 @@ export default function CohortDetailPage() {
                       <p className="font-medium text-sm truncate">{a.title}</p>
                       {a.deadline && (
                         <p className="text-xs text-muted-foreground">
-                          Due {new Date(a.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          {isFuture(parseISO(a.deadline))
+                            ? `Due ${formatDistanceToNow(parseISO(a.deadline), { addSuffix: true })}`
+                            : `Due ${format(parseISO(a.deadline), 'MMM d, yyyy')}`}
                         </p>
                       )}
                     </div>
