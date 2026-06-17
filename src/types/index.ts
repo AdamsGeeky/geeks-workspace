@@ -61,3 +61,63 @@ export interface AdminDashboard {
 export interface StreakData { currentCount: number; bestCount: number; isActiveToday: boolean; expiresSoon: boolean }
 export interface ReputationData { score: number; level: string; submissionPoints: number; communityPoints: number; mentorPoints: number }
 export interface AchievementData { id: UUID; title: string; description: string; type: AchievementType; unlockedAt: ISODateString | null; claimedAt: ISODateString | null }
+
+// Featured builders (matches GET /featured-builders shape)
+export interface FeaturedBuilder {
+  id: UUID
+  userId: UUID
+  cohortId: UUID | null
+  reason: string
+  selectedBy: UUID | null
+  featuredAt: ISODateString
+  createdAt: ISODateString
+  user?: Pick<SafeUser, 'id' | 'fullName' | 'avatarUrl' | 'bio'>
+  cohort?: Pick<Cohort, 'id' | 'name'> | null
+}
+
+// Achievement progress (matches GET /achievements/me items)
+export interface AchievementProgress {
+  id: UUID
+  key: string
+  title: string
+  description: string
+  icon: string | null
+  type: AchievementType
+  xpReward: number
+  unlockedAt: ISODateString | null
+  claimedAt: ISODateString | null
+}
+
+// Admin overview (matches GET /admin/overview)
+export interface AdminOverviewResponse {
+  users: number
+  cohorts: number
+  assignments: number
+  submissions: number
+  announcements: number
+  materials: number
+  communityPosts: number
+}
+
+// Activity event (matches GET /activity, /activity/me items)
+export interface ActivityEvent {
+  id: UUID
+  userId: UUID | null
+  cohortId: UUID | null
+  eventType: string
+  entityType: string | null
+  entityId: string | null
+  metadata: Record<string, unknown> | null
+  occurredAt: ISODateString
+  createdAt: ISODateString
+}
+
+// Today Mission (matches GET /engagement/today data shape)
+export interface TodayMissionData {
+  title: string
+  message: string
+  primaryAction: { type: string; label: string; href: string }
+  streak: { currentCount: number; expiresSoon: boolean }
+  reputation: { score: number; level: string }
+  context: { cohortMomentum: string; unreadFeedbackCount: number }
+}

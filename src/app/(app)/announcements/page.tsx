@@ -8,7 +8,7 @@ import { z } from 'zod'
 import { format, parseISO } from 'date-fns'
 import { Megaphone, Globe, Check, Plus, Loader2, AlertCircle } from 'lucide-react'
 import { toast } from 'sonner'
-import api from '@/lib/api'
+import api, { unwrapList } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import { handleApiError } from '@/lib/handleApiError'
 import type { Announcement, Cohort, Envelope } from '@/types'
@@ -64,8 +64,8 @@ export default function AnnouncementsPage() {
   const { data: announcements, isLoading, error } = useQuery({
     queryKey: ['announcements'],
     queryFn: async () => {
-      const res = await api.get<Announcement[]>('/announcements')
-      return Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+      const res = await api.get('/announcements')
+      return unwrapList<Announcement>(res.data)
     },
     staleTime: 30_000,
   })
@@ -73,8 +73,8 @@ export default function AnnouncementsPage() {
   const { data: cohorts } = useQuery({
     queryKey: ['cohorts'],
     queryFn: async () => {
-      const res = await api.get<Cohort[]>('/cohorts')
-      return Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+      const res = await api.get('/cohorts')
+      return unwrapList<Cohort>(res.data)
     },
     enabled: canCreate,
     staleTime: 5 * 60_000,

@@ -35,5 +35,22 @@ api.interceptors.response.use(
   }
 )
 
+// Unwraps a list response that may be a raw array or a paginated/enveloped { data: [...] } shape.
+export function unwrapList<T>(data: unknown): T[] {
+  if (Array.isArray(data)) return data as T[]
+  if (data && typeof data === 'object' && Array.isArray((data as { data?: unknown }).data)) {
+    return (data as { data: T[] }).data
+  }
+  return []
+}
+
+// Unwraps a single-object response that may be raw or enveloped as { data: {...} }.
+export function unwrapOne<T>(data: unknown): T {
+  if (data && typeof data === 'object' && 'data' in (data as Record<string, unknown>)) {
+    return (data as { data: T }).data
+  }
+  return data as T
+}
+
 export { api }
 export default api
