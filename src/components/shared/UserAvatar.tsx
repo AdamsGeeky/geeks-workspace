@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 type AvatarSize = 'sm' | 'md' | 'lg' | 'xl'
 
 interface UserAvatarProps {
-  name: string
+  name?: string | null
   avatarUrl?: string | null
   size?: AvatarSize
   className?: string
@@ -25,7 +25,7 @@ const textClasses: Record<AvatarSize, string> = {
 }
 
 export function UserAvatar({ name, avatarUrl, size = 'md', className }: UserAvatarProps) {
-  const initials = name
+  const initials = (name || 'U')
     .split(' ')
     .map((n) => n[0])
     .slice(0, 2)
@@ -34,7 +34,7 @@ export function UserAvatar({ name, avatarUrl, size = 'md', className }: UserAvat
 
   return (
     <Avatar className={cn(sizeClasses[size], className)}>
-      {avatarUrl && <AvatarImage src={avatarUrl} alt={name} />}
+      {avatarUrl && <AvatarImage src={avatarUrl} alt={name || 'User avatar'} />}
       <AvatarFallback className={cn('bg-primary text-primary-foreground font-semibold', textClasses[size])}>
         {initials}
       </AvatarFallback>
