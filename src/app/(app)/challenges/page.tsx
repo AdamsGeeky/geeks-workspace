@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Trophy, Flame, Star, Loader2, Calendar, Users, CheckCircle2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { format } from 'date-fns'
+import { format, formatDistanceToNow, isFuture, parseISO } from 'date-fns'
 import api, { unwrapList, unwrapOne } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import type { Challenge, StreakData, ReputationData } from '@/types'
@@ -167,7 +167,10 @@ export default function ChallengesPage() {
                   <div className="mt-auto flex items-center justify-between">
                     <div className="flex flex-col gap-1 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <Calendar className="size-3" /> Ends {format(new Date(challenge.endsAt), 'MMM d')}
+                        <Calendar className="size-3" />
+                        {isFuture(parseISO(challenge.endsAt))
+                          ? `Ends ${formatDistanceToNow(parseISO(challenge.endsAt), { addSuffix: true })}`
+                          : `Ended ${format(parseISO(challenge.endsAt), 'MMM d, yyyy')}`}
                       </span>
                       <span className="flex items-center gap-1">
                         <Users className="size-3" /> {participantCount} joined

@@ -4,22 +4,22 @@ import type { AssignmentStatus, SubmissionStatus, ChallengeStatus, ChallengePart
 type Status = AssignmentStatus | SubmissionStatus | ChallengeStatus | ChallengeParticipantStatus
 
 const STATUS_VARIANTS: Record<string, 'success' | 'destructive' | 'warning' | 'orange' | 'slate' | 'info' | 'secondary'> = {
-  // Assignment
+  // Assignment statuses
   DRAFT: 'slate',
   PUBLISHED: 'success',
   CLOSED: 'destructive',
-  // Submission
-  SUBMITTED: 'info',
+  // Submission statuses
+  SUBMITTED: 'slate',
   UNDER_REVIEW: 'warning',
   COMPLETED: 'success',
   NEEDS_REVISION: 'orange',
   REJECTED: 'destructive',
-  // Challenge
+  // Challenge statuses
   ACTIVE: 'success',
   ENDED: 'slate',
   CANCELLED: 'destructive',
-  // Participant
-  JOINED: 'info',
+  // Challenge participant statuses
+  JOINED: 'slate',
   WITHDRAWN: 'destructive',
 }
 

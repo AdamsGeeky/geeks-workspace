@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'sonner'
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://geekink-cloud-sp39l.ondigitalocean.app/api/v1'
 
@@ -20,17 +21,30 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// Response interceptor: handle 401 globally
+// Response interceptor: handle errors globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    if (!error.response) {
+      // Network / CORS / timeout — no HTTP response received
+      toast.error('Connection error. Please try again.')
+      return Promise.reject(error)
+    }
+
+    const status = error.response?.status
+
+    if (status === 401) {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('accessToken')
         localStorage.removeItem('user')
+        // Expire auth cookies so middleware redirects correctly
+        document.cookie = 'accessToken=; path=/; max-age=0'
+        document.cookie = 'role=; path=/; max-age=0'
         window.location.href = '/login'
       }
     }
+    // 403 — do not redirect; let each page handle with its own message
+
     return Promise.reject(error)
   }
 )
