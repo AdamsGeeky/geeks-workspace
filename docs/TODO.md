@@ -2,9 +2,9 @@
 ### Step-by-step, Feature-by-Feature Prompts for Next.js + shadcn/ui
 
 > **How to use this guide:**
-> Copy each prompt block into your AI code generator (Cursor, v0, Copilot Workspace, etc.) **in order**. Each prompt builds on the previous one. Do not skip steps.
+> Copy each prompt block into your AI code generator v0 **in order**. Each prompt builds on the previous one. Do not skip steps.
 >
-> **Stack:** Next.js 14 (App Router) · TypeScript · Tailwind CSS · shadcn/ui · TanStack Query v5
+> **Stack:** Next.js  (App Router) · TypeScript · Tailwind CSS · shadcn/ui · TanStack Query v5
 > **Primary Color:** Green (`#16a34a` / Tailwind `green-600`)
 > **API Base URL:** `https://geekink-cloud-sp39l.ondigitalocean.app/api/v1`
 
@@ -225,7 +225,7 @@ Role badge colors:
 
 ---
 
-## PROMPT 3 — Dashboard
+## TODO 3 — Dashboard
 
 ```
 Build the Dashboard page for GeekInk Workspace.
