@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import api from '@/lib/api'
+import api, { unwrapList } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import { handleApiError } from '@/lib/handleApiError'
 import type { Notification, NotificationType } from '@/types'
@@ -59,8 +59,8 @@ export default function NotificationsPage() {
   const { data: notifications, isLoading } = useQuery({
     queryKey: ['notifications'],
     queryFn: async () => {
-      const res = await api.get<Notification[]>('/notifications')
-      return Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+      const res = await api.get('/notifications')
+      return unwrapList<Notification>(res.data)
     },
     staleTime: 15_000,
   })

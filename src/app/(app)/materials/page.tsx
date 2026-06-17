@@ -8,7 +8,7 @@ import { z } from 'zod'
 import { format, parseISO } from 'date-fns'
 import { BookOpen, ExternalLink, Download, Plus, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
-import api from '@/lib/api'
+import api, { unwrapList } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import { handleApiError } from '@/lib/handleApiError'
 import type { Material, Cohort } from '@/types'
@@ -46,8 +46,8 @@ export default function MaterialsPage() {
   const { data: materials, isLoading } = useQuery({
     queryKey: ['materials'],
     queryFn: async () => {
-      const res = await api.get<Material[]>('/materials')
-      return Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+      const res = await api.get('/materials')
+      return unwrapList<Material>(res.data)
     },
     staleTime: 5 * 60_000,
   })
@@ -55,8 +55,8 @@ export default function MaterialsPage() {
   const { data: cohorts } = useQuery({
     queryKey: ['cohorts'],
     queryFn: async () => {
-      const res = await api.get<Cohort[]>('/cohorts')
-      return Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+      const res = await api.get('/cohorts')
+      return unwrapList<Cohort>(res.data)
     },
     staleTime: 5 * 60_000,
   })
