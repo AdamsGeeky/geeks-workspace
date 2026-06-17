@@ -94,11 +94,12 @@ export default function ChallengesPage() {
       await api.post(`/challenges/${challengeId}/join`)
     },
     onSuccess: () => {
-      toast.success('Joined challenge!')
+      toast.success('Joined challenge! You can now submit your work.')
       queryClient.invalidateQueries({ queryKey: ['challenges'] })
     },
     onError: (err) => {
-      toast.error(handleApiError(err))
+      const errorMsg = handleApiError(err)
+      toast.error(errorMsg)
     },
   })
 
@@ -181,8 +182,8 @@ export default function ChallengesPage() {
               const hasJoined = !!challenge.participants?.some((p: any) => p.userId === user?.id)
               const isLive = isChallengeLive(challenge)
               const xp = getXpReward(challenge)
-              const canJoin = user?.role === 'STUDENT' && challenge.status === 'ACTIVE' && !hasJoined
-              const canSubmit = user?.role === 'STUDENT' && hasJoined
+              const canJoin = user?.role === 'STUDENT' && challenge.status === 'ACTIVE' && !hasJoined && isLive
+              const canSubmit = user?.role === 'STUDENT' && hasJoined && isLive
 
               return (
                 <Card key={challenge.id} className="flex flex-col">
@@ -246,6 +247,11 @@ export default function ChallengesPage() {
                         {hasJoined && !canSubmit && (
                           <Button size="sm" variant="outline" disabled className="flex-1">
                             Joined
+                          </Button>
+                        )}
+                        {!canJoin && !canSubmit && user?.role === 'STUDENT' && challenge.status === 'ACTIVE' && !isLive && (
+                          <Button size="sm" variant="outline" disabled className="flex-1">
+                            Not started yet
                           </Button>
                         )}
                         {!canJoin && !canSubmit && user?.role === 'STUDENT' && challenge.status === 'ENDED' && (
